@@ -1,25 +1,21 @@
 # ecsol
 
-This is an implementation of elliptic curve secp256k in 100% written in solidity.
+[![Build Status](https://travis-ci.org/1Address/ecsol.svg?branch=master)](https://travis-ci.org/1Address/ecsol)
+[![Coverage Status](https://coveralls.io/repos/github/1Address/ecsol/badge.svg)](https://coveralls.io/github/1Address/ecsol)
 
-### Benchmark
+Elliptic Curve Implementation in Solidity (fork of https://github.com/jbaylina/ecsol)
 
-Calculate a public key from a private key takes about 800,000 gas.
+# Features
 
-### How to use.
+1. Added methods `ecadd` and `ecmul` without `z` argument
+2. Added methods `ecmulVerify` and `publicKeyVerify` for super-fast verifications (33k gas)
 
-The contract mainly has two methods:
+# Installation
 
-    function publicKey(uint256 privKey) constant
-        returns(uint256 qx, uint256 qy)
+1. Install [truffle](http://truffleframework.com) globally with `npm install -g truffle`
+2. Install [ganache-cli](https://github.com/trufflesuite/ganache-cli) globally with `npm install -g ganache-cli`
+3. Install local packages with `npm install`
+4. Run ganache in separate terminal `scripts/rpc.sh`
+5. Run tests with `npm test`
 
-and
-
-    function deriveKey(uint256 privKey, uint256 pubX, uint256 pubY) constant
-        returns(uint256 qx, uint256 qy)
-
-A deployed version of the library can be found here: [0x28dcd428e8125990f9e5fe1b82db0e3ed240711c](https://etherscan.io/address/0x28dcd428e8125990f9e5fe1b82db0e3ed240711c#code)
-
-    var ecsolAbi = '[{"constant":true,"inputs":[{"name":"x1","type":"uint256"},{"name":"z1","type":"uint256"},{"name":"x2","type":"uint256"},{"name":"z2","type":"uint256"}],"name":"_jAdd","outputs":[{"name":"x3","type":"uint256"},{"name":"z3","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"x1","type":"uint256"},{"name":"z1","type":"uint256"},{"name":"x2","type":"uint256"},{"name":"z2","type":"uint256"}],"name":"_jSub","outputs":[{"name":"x3","type":"uint256"},{"name":"z3","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"x1","type":"uint256"},{"name":"z1","type":"uint256"},{"name":"x2","type":"uint256"},{"name":"z2","type":"uint256"}],"name":"_jMul","outputs":[{"name":"x3","type":"uint256"},{"name":"z3","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"x1","type":"uint256"},{"name":"z1","type":"uint256"},{"name":"x2","type":"uint256"},{"name":"z2","type":"uint256"}],"name":"_jDiv","outputs":[{"name":"x3","type":"uint256"},{"name":"z3","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"privKey","type":"uint256"}],"name":"publicKey","outputs":[{"name":"qx","type":"uint256"},{"name":"qy","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"a","type":"uint256"}],"name":"_inverse","outputs":[{"name":"invA","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"d","type":"uint256"},{"name":"x1","type":"uint256"},{"name":"y1","type":"uint256"},{"name":"z1","type":"uint256"}],"name":"_ecMul","outputs":[{"name":"x3","type":"uint256"},{"name":"y3","type":"uint256"},{"name":"z3","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"x1","type":"uint256"},{"name":"y1","type":"uint256"},{"name":"z1","type":"uint256"},{"name":"x2","type":"uint256"},{"name":"y2","type":"uint256"},{"name":"z2","type":"uint256"}],"name":"_ecAdd","outputs":[{"name":"x3","type":"uint256"},{"name":"y3","type":"uint256"},{"name":"z3","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"privKey","type":"uint256"},{"name":"pubX","type":"uint256"},{"name":"pubY","type":"uint256"}],"name":"deriveKey","outputs":[{"name":"qx","type":"uint256"},{"name":"qy","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"x1","type":"uint256"},{"name":"y1","type":"uint256"},{"name":"z1","type":"uint256"}],"name":"_ecDouble","outputs":[{"name":"x3","type":"uint256"},{"name":"y3","type":"uint256"},{"name":"z3","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[],"type":"constructor"}]
-
-    var ecsol = eth.contract(ecsolAbi).at('0x28dcd428e8125990f9e5fe1b82db0e3ed240711c')
+On macOS you also need to install watchman: `brew install watchman`
