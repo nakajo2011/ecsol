@@ -7,8 +7,8 @@ Elliptic Curve Implementation in Solidity (fork of https://github.com/jbaylina/e
 
 # Features
 
-1. Added methods `ecadd` and `ecmul` without `z` argument
-2. Added methods `ecmulVerify` and `publicKeyVerify` for super-fast verifications (33k gas)
+1. Methods `ecadd` and `ecmul` without `z` argument
+2. Methods `ecmulVerify` and `publicKeyVerify` for super-fast (25x) verifications (31-33k gas instead of 700k-1000k gas)
 
 # Installation
 
