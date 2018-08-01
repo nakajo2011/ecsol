@@ -273,7 +273,7 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
     });
 
     it('2G+1G = 3G', async function () {
-        this.timeout(20000);
+        this.timeout(60000);
 
         const [x2, y2, z2] = await ecCurve._ecDouble.call(gx, gy, 1);
         log('x2: ' + x2.toString(10));
@@ -308,7 +308,7 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
     });
 
     it('should create a valid public key', async function () {
-        this.timeout(20000);
+        this.timeout(60000);
 
         var key = ec.genKeyPair();
         var priv = key.getPrivate();
@@ -328,7 +328,7 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
     });
 
     it('should consume few gas', async function () {
-        this.timeout(20000);
+        this.timeout(60000);
 
         const key = ec.genKeyPair();
         const d = new BigNumber(key.getPrivate().toString(16), 16);
@@ -338,7 +338,7 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
     });
 
     it('Key derived in both directions should be the same', async function () {
-        this.timeout(20000);
+        this.timeout(60000);
 
         const key1 = ec.genKeyPair();
         const key2 = ec.genKeyPair();
@@ -366,7 +366,7 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
     });
 
     it('should follow associative property', async function () {
-        this.timeout(20000);
+        this.timeout(60000);
 
         log('n: ' + n.toString(10));
         log('n2: ' + n2.toString(10));
@@ -485,7 +485,7 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
     });
 
     it('should consume few gas for verification', async function () {
-        this.timeout(20000);
+        this.timeout(60000);
 
         const key = ec.genKeyPair();
         const d = new BigNumber(key.getPrivate().toString(16), 16);
