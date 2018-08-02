@@ -193,6 +193,10 @@ contract EC {
         y2 = mulmod(y2, z, n);
     }
 
+    //
+    // Based on the original idea of Vitalik Buterin:
+    // https://ethresear.ch/t/you-can-kinda-abuse-ecrecover-to-do-ecmul-in-secp256k1-today/2384/9
+    //
     function ecmulVerify(uint256 x1, uint256 y1, uint256 scalar, uint256 qx, uint256 qy) public pure
         returns(bool)
     {
