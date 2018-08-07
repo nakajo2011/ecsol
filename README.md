@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/1Address/ecsol.svg?branch=master)](https://travis-ci.org/1Address/ecsol)
 [![Coverage Status](https://coveralls.io/repos/github/1Address/ecsol/badge.svg)](https://coveralls.io/github/1Address/ecsol)
 
-Elliptic Curve Implementation in Solidity (fork of https://github.com/jbaylina/ecsol)
+Elliptic Curve Implementation in Solidity (fork of https://github.com/jbaylina/ecsol) with implemented `ecrecover` trick by Vitalik Buterin (https://ethresear.ch/t/you-can-kinda-abuse-ecrecover-to-do-ecmul-in-secp256k1-today/2384).
 
 # Features
 
