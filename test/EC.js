@@ -307,7 +307,7 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
         y3.should.be.bignumber.equal(y3c);
     });
 
-    it('should create a valid public key', async function () {
+    it.only('should create a valid public key', async function () {
         this.timeout(120000);
 
         var key = ec.genKeyPair();
