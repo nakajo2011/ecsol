@@ -15,6 +15,12 @@ module.exports = {
             network_id: '*',
             gas: 0xffffffff,
         },
+        profiler: {
+            host: 'localhost',
+            port: 8555,
+            network_id: '*',
+            gas: 0xffffffff,
+        },
     },
     solc: {
         optimizer: {

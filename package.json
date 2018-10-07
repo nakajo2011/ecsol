@@ -29,6 +29,7 @@
     "ethjs-abi": "^0.2.1",
     "ganache-core": "^2.1.2",
     "solidity-coverage": "^0.5.4",
+    "solidity-profiler": "../solidity-profiler",
     "solium": "^1.1.8",
     "truffle": "^4.1.11",
     "web3": "^0.19.1",
@@ -43,6 +44,7 @@
     "lint:all": "npm run lint && npm run lint:sol",
     "lint:all:fix": "npm run lint:fix && npm run lint:sol:fix",
     "coverage": "./node_modules/.bin/solidity-coverage",
+    "profiler": "./node_modules/.bin/solidity-profiler",
     "rpc": "scripts/rpc.sh"
   },
   "repository": {

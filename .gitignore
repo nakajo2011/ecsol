@@ -9,3 +9,9 @@ coverageEnv/
 allFiredEvents
 coverage.json
 scTopics
+
+profiler/
+profilerEnv/
+allFiredEvents
+profiler.json
+spTopics
