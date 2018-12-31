@@ -3,10 +3,10 @@
 const Elliptic = require('elliptic').ec;
 const ec = new Elliptic('secp256k1');
 
-const BigNumber = web3.BigNumber;
+const BigNumber = web3.utils.BN;
 require('chai')
     .use(require('chai-as-promised'))
-    .use(require('chai-bignumber')(web3.BigNumber))
+    .use(require('bn-chai')(BigNumber))
     .should();
 
 const EC = artifacts.require('EC');
@@ -18,7 +18,8 @@ function log (S) {
     }
 }
 
-contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5]) {
+contract('EC', function ([_, wallet1, wallet2, wallet3, wallet4, wallet5]) {
+    describe('EC test', () => {
     const n = new BigNumber('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F', 16);
     const n2 = new BigNumber('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141', 16);
     const gx = new BigNumber('79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798', 16);
@@ -41,142 +42,142 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
     });
 
     it('should Add two small numbers', async function () {
-        const [x, z] = await ecCurve._jAdd.call(2, 3, 4, 5);
-        x.should.be.bignumber.equal(22);
-        z.should.be.bignumber.equal(15);
+        const values = await ecCurve._jAdd.call(2, 3, 4, 5);
+        values.x3.should.be.eq.BN(22);
+        values.z3.should.be.eq.BN(15);
     });
 
     it('should Add one big numbers with one small', async function () {
-        const [x, z] = await ecCurve._jAdd.call(n.sub(1), 1, 2, 1);
-        x.should.be.bignumber.equal(1);
-        z.should.be.bignumber.equal(1);
+        const values = await ecCurve._jAdd.call(n.subn(1), 1, 2, 1);
+        values.x3.should.be.eq.BN(1);
+        values.z3.should.be.eq.BN(1);
     });
 
     it('should Add two big numbers', async function () {
-        const [x, z] = await ecCurve._jAdd.call(n.sub(1), 1, n.sub(2), 1);
-        x.should.be.bignumber.equal(n.sub(3));
-        z.should.be.bignumber.equal(1);
+        const values = await ecCurve._jAdd.call(n.subn(1), 1, n.subn(2), 1);
+        values.x3.should.be.eq.BN(n.subn(3));
+        values.z3.should.be.eq.BN(1);
     });
 
     it('should Substract two small numbers', async function () {
-        const [x, z] = await ecCurve._jSub.call(2, 3, 4, 5);
-        x.should.be.bignumber.equal(n.sub(2));
-        z.should.be.bignumber.equal(15);
+        const values = await ecCurve._jSub.call(2, 3, 4, 5);
+        values.x3.should.be.eq.BN(n.subn(2));
+        values.z3.should.be.eq.BN(15);
     });
 
     it('should Substract one big numbers with one small', async function () {
-        const [x, z] = await ecCurve._jSub.call(2, 1, n.sub(1), 1);
-        x.should.be.bignumber.equal(3);
-        z.should.be.bignumber.equal(1);
+        const values = await ecCurve._jSub.call(2, 1, n.subn(1), 1);
+        values.x3.should.be.eq.BN(3);
+        values.z3.should.be.eq.BN(1);
     });
 
     it('should Substract two big numbers', async function () {
-        const [x, z] = await ecCurve._jSub.call(n.sub(2), 1, n.sub(1), 1);
-        x.should.be.bignumber.equal(n.sub(1));
-        z.should.be.bignumber.equal(1);
+        const values = await ecCurve._jSub.call(n.subn(2), 1, n.subn(1), 1);
+        values.x3.should.be.eq.BN(n.subn(1));
+        values.z3.should.be.eq.BN(1);
     });
 
     it('should Substract two same numbers', async function () {
-        const [x, z] = await ecCurve._jSub.call(n.sub(16), 1, n.sub(16), 1);
-        x.should.be.bignumber.equal(0);
-        z.should.be.bignumber.equal(1);
+        const values = await ecCurve._jSub.call(n.subn(16), 1, n.subn(16), 1);
+        values.x3.should.be.eq.BN(0);
+        values.z3.should.be.eq.BN(1);
     });
 
     it('should Multiply two small numbers', async function () {
-        const [x, z] = await ecCurve._jMul.call(2, 3, 4, 5);
-        x.should.be.bignumber.equal(8);
-        z.should.be.bignumber.equal(15);
+        const values = await ecCurve._jMul.call(2, 3, 4, 5);
+        values.x3.should.be.eq.BN(8);
+        values.z3.should.be.eq.BN(15);
     });
 
     it('should Multiply one big numbers with one small', async function () {
-        const [x, z] = await ecCurve._jMul.call(n.sub(1), 1, 2, 1);
-        x.should.be.bignumber.equal(n.sub(2));
-        z.should.be.bignumber.equal(1);
+        const values = await ecCurve._jMul.call(n.subn(1), 1, 2, 1);
+        values.x3.should.be.eq.BN(n.subn(2));
+        values.z3.should.be.eq.BN(1);
     });
 
     it('should Multiply two big numbers', async function () {
-        const [x, z] = await ecCurve._jMul.call(n.sub(2), 1, n.sub(3), 1);
-        x.should.be.bignumber.equal(6);
-        z.should.be.bignumber.equal(1);
+        const values = await ecCurve._jMul.call(n.subn(2), 1, n.subn(3), 1);
+        values.x3.should.be.eq.BN(6);
+        values.z3.should.be.eq.BN(1);
     });
 
     it('should Multiply one is zero', async function () {
-        const [x, z] = await ecCurve._jMul.call(2, 3, 0, 5);
-        x.should.be.bignumber.equal(0);
-        z.should.be.bignumber.equal(15);
+        const values = await ecCurve._jMul.call(2, 3, 0, 5);
+        values.x3.should.be.eq.BN(0);
+        values.z3.should.be.eq.BN(15);
     });
 
     it('should Divide two small numbers', async function () {
-        const [x, z] = await ecCurve._jDiv.call(2, 3, 4, 5);
-        x.should.be.bignumber.equal(10);
-        z.should.be.bignumber.equal(12);
+        const values = await ecCurve._jDiv.call(2, 3, 4, 5);
+        values.x3.should.be.eq.BN(10);
+        values.z3.should.be.eq.BN(12);
     });
 
     it('should Divide one big numbers with one small', async function () {
-        const [x, z] = await ecCurve._jDiv.call(n.sub(1), 1, 2, 1);
-        x.should.be.bignumber.equal(n.sub(1));
-        z.should.be.bignumber.equal(2);
+        const values = await ecCurve._jDiv.call(n.subn(1), 1, 2, 1);
+        values.x3.should.be.eq.BN(n.subn(1));
+        values.z3.should.be.eq.BN(2);
     });
 
     it('should Divide two big numbers', async function () {
-        const [x, z] = await ecCurve._jDiv.call(n.sub(2), 1, n.sub(3), 1);
-        x.should.be.bignumber.equal(n.sub(2));
-        z.should.be.bignumber.equal(n.sub(3));
+        const values = await ecCurve._jDiv.call(n.subn(2), 1, n.subn(3), 1);
+        values.x3.should.be.eq.BN(n.subn(2));
+        values.z3.should.be.eq.BN(n.subn(3));
     });
 
     it('should Divide one is zero', async function () {
-        const [x, z] = await ecCurve._jDiv.call(2, 3, 0, 5);
-        x.should.be.bignumber.equal(10);
-        z.should.be.bignumber.equal(0);
+        const values = await ecCurve._jDiv.call(2, 3, 0, 5);
+        values.x3.should.be.eq.BN(10);
+        values.z3.should.be.eq.BN(0);
     });
 
     it('should Calculate inverse', async function () {
         const d = 2;
         const inv = await ecCurve._inverse.call(d);
-        const [x, z] = await ecCurve._jMul.call(d, 1, inv, 1);
-        x.should.be.bignumber.equal(1);
-        z.should.be.bignumber.equal(1);
+        const values = await ecCurve._jMul.call(d, 1, inv, 1);
+        values.x3.should.be.eq.BN(1);
+        values.z3.should.be.eq.BN(1);
     });
 
     it('Inverse of 0', async function () {
         const d = 0;
         const inv = await ecCurve._inverse.call(d);
-        inv.should.be.bignumber.equal(0);
+        inv.should.be.eq.BN(0);
     });
 
     it('Inverse of 1', async function () {
         const d = 1;
         const inv = await ecCurve._inverse.call(d);
-        inv.should.be.bignumber.equal(1);
+        inv.should.be.eq.BN(1);
     });
 
     it('should Calculate inverse -1', async function () {
-        const d = n.sub(1);
+        const d = n.subn(1);
         const inv = await ecCurve._inverse.call(d);
-        const [x, z] = await ecCurve._jMul.call(d, 1, inv, 1);
-        x.should.be.bignumber.equal(1);
-        z.should.be.bignumber.equal(1);
+        const values = await ecCurve._jMul.call(d, 1, inv, 1);
+        values.x3.should.be.eq.BN(1);
+        values.z3.should.be.eq.BN(1);
     });
 
     it('should Calculate inverse -2', async function () {
-        const d = n.sub(2);
+        const d = n.subn(2);
         const inv = await ecCurve._inverse.call(d);
-        const [x, z] = await ecCurve._jMul.call(d, 1, inv, 1);
-        x.should.be.bignumber.equal(1);
-        z.should.be.bignumber.equal(1);
+        const values = await ecCurve._jMul.call(d, 1, inv, 1);
+        values.x3.should.be.eq.BN(1);
+        values.z3.should.be.eq.BN(1);
     });
 
     it('should Calculate inverse big number', async function () {
         const d = '0xf167a208bea79bc52668c016aff174622837f780ab60f59dfed0a8e66bb7c2ad';
         const inv = await ecCurve._inverse.call(d);
-        const [x, z] = await ecCurve._jMul.call(d, 1, inv, 1);
-        x.should.be.bignumber.equal(1);
-        z.should.be.bignumber.equal(1);
+        const values = await ecCurve._jMul.call(d, 1, inv, 1);
+        values.x3.should.be.eq.BN(1);
+        values.z3.should.be.eq.BN(1);
     });
 
     it('should double gx,gy', async function () {
-        let ln = gx.mul(gx).mul(3);
-        let ld = gy.mul(2);
+        let ln = gx.mul(gx).muln(3);
+        let ld = gy.muln(2);
 
         ln = ln.mod(n);
         ld = ld.mod(n);
@@ -187,12 +188,12 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
         let x2ccN = ln.mul(ln);
         let x2ccD = ld.mul(ld);
 
-        x2ccN = x2ccN.sub(gx.mul(2).mul(x2ccD));
+        x2ccN = x2ccN.sub(gx.muln(2).mul(x2ccD));
 
         x2ccN = x2ccN.mod(n);
-        if (x2ccN.lessThan(0)) x2ccN = x2ccN.add(n);
+        if (x2ccN.ltn(0)) x2ccN = x2ccN.add(n);
         x2ccD = x2ccD.mod(n);
-        if (x2ccD.lessThan(0)) x2ccD = x2ccD.add(n);
+        if (x2ccD.ltn(0)) x2ccD = x2ccD.add(n);
         log('x2ccN: ' + x2ccN.toString(10));
         log('x2ccD: ' + x2ccD.toString(10));
 
@@ -218,9 +219,9 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
         y2ccD = x2ccD.mul(ld);
 
         y2ccN = y2ccN.mod(n);
-        if (y2ccN.lessThan(0)) y2ccN = y2ccN.add(n);
+        if (y2ccN.ltn(0)) y2ccN = y2ccN.add(n);
         y2ccD = y2ccD.mod(n);
-        if (y2ccD.lessThan(0)) y2ccD = y2ccD.add(n);
+        if (y2ccD.ltn(0)) y2ccD = y2ccD.add(n);
         log('y2ccN: ' + y2ccN.toString(10));
         log('y2ccD: ' + y2ccD.toString(10));
 
@@ -229,16 +230,17 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
         y2ccN = y2ccN.mul(x2ccD);
 
         x2ccN = x2ccN.mod(n);
-        if (x2ccN.lessThan(0)) x2ccN = x2ccN.add(n);
+        if (x2ccN.ltn(0)) x2ccN = x2ccN.add(n);
         y2ccN = y2ccN.mod(n);
-        if (y2ccN.lessThan(0)) y2ccN = y2ccN.add(n);
+        if (y2ccN.ltn(0)) y2ccN = y2ccN.add(n);
         ccD = ccD.mod(n);
-        if (ccD.lessThan(0)) ccD = ccD.add(n);
+        if (ccD.ltn(0)) ccD = ccD.add(n);
         log('x2ccN: ' + x2ccN.toString(10));
         log('y2ccN: ' + y2ccN.toString(10));
         log('y2ccD: ' + ccD.toString(10));
 
-        let [x2, y2, z2] = await ecCurve._ecDouble.call(gx, gy, 1);
+        let values = await ecCurve._ecDouble.call(gx, gy, 1);
+        let [x2, y2, z2] = [values.x3, values.y3, values.z3]
         log('x2: ' + x2.toString(10));
         log('y2: ' + y2.toString(10));
         log('z2: ' + z2.toString(10));
@@ -250,15 +252,16 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
         y2 = y2.mul(inv).mod(n);
         log('x2: ' + x2.toString(10));
         log('y2: ' + y2.toString(10));
-        x2.should.be.bignumber.equal('89565891926547004231252920425935692360644145829622209833684329913297188986597');
-        y2.should.be.bignumber.equal('12158399299693830322967808612713398636155367887041628176798871954788371653930');
+        x2.should.be.eq.BN('89565891926547004231252920425935692360644145829622209833684329913297188986597');
+        y2.should.be.eq.BN('12158399299693830322967808612713398636155367887041628176798871954788371653930');
     });
 
     it('Add EC', async function () {
         log('Start Add');
         var x2 = new BigNumber('89565891926547004231252920425935692360644145829622209833684329913297188986597');
         var y2 = new BigNumber('12158399299693830322967808612713398636155367887041628176798871954788371653930');
-        let [x3, y3, z3] = await ecCurve._ecAdd.call(gx, gy, 1, x2, y2, 1);
+        const values = await ecCurve._ecAdd.call(gx, gy, 1, x2, y2, 1);
+        let [x3, y3, z3] = [values.x3, values.y3, values.z3]
         log('x3: ' + x3.toString(10));
         log('y3: ' + y3.toString(10));
         log('z3: ' + z3.toString(10));
@@ -268,24 +271,27 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
         y3 = y3.mul(inv).mod(n);
         log('x3: ' + x3.toString(10));
         log('y3: ' + y3.toString(10));
-        x3.should.be.bignumber.equal('112711660439710606056748659173929673102114977341539408544630613555209775888121');
-        y3.should.be.bignumber.equal('25583027980570883691656905877401976406448868254816295069919888960541586679410');
+        x3.should.be.eq.BN('112711660439710606056748659173929673102114977341539408544630613555209775888121');
+        y3.should.be.eq.BN('25583027980570883691656905877401976406448868254816295069919888960541586679410');
     });
 
     it('2G+1G = 3G', async function () {
         this.timeout(120000);
 
-        const [x2, y2, z2] = await ecCurve._ecDouble.call(gx, gy, 1);
+        let values = await ecCurve._ecDouble.call(gx, gy, 1);
+        const [x2, y2, z2] = [values.x3, values.y3, values.z3]
         log('x2: ' + x2.toString(10));
         log('y2: ' + y2.toString(10));
         log('z2: ' + z2.toString(10));
 
-        let [x3, y3, z3] = await ecCurve._ecAdd.call(gx, gy, 1, x2, y2, z2);
+        values = await ecCurve._ecAdd.call(gx, gy, 1, x2, y2, z2);
+        let [x3, y3, z3] = [values.x3, values.y3, values.z3]
         log('x3: ' + x3.toString(10));
         log('y3: ' + y3.toString(10));
         log('z3: ' + z3.toString(10));
 
-        let [x3c, y3c, z3c] = await ecCurve._ecMul.call(3, gx, gy, 1);
+        values = await ecCurve._ecMul.call(3, gx, gy, 1);
+        let [x3c, y3c, z3c] = [values.x3, values.y3, values.z3]
         log('x3c: ' + x3c.toString(10));
         log('y3c: ' + y3c.toString(10));
         log('z3c: ' + z3c.toString(10));
@@ -303,8 +309,8 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
         log('Inv test: ' + inv3c.mul(z3c).mod(n).toString(10));
         log('x3cn: ' + x3c.toString(10));
         log('y3cn: ' + y3c.toString(10));
-        x3.should.be.bignumber.equal(x3c);
-        y3.should.be.bignumber.equal(y3c);
+        x3.should.be.eq.BN(x3c);
+        y3.should.be.eq.BN(y3c);
     });
 
     it('should create a valid public key', async function () {
@@ -322,9 +328,10 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
         log(pub_x.toString(10));
         log(pub_y.toString(10));
 
-        const [pub_x_calc, pub_y_calc] = await ecCurve.publicKey.call(d);
-        pub_x_calc.should.be.bignumber.equal(pub_x);
-        pub_y_calc.should.be.bignumber.equal(pub_y);
+        const values = await ecCurve.publicKey.call(d);
+        const [pub_x_calc, pub_y_calc] = [values.qx, values.qy]
+        pub_x_calc.should.be.eq.BN(pub_x);
+        pub_y_calc.should.be.eq.BN(pub_y);
     });
 
     //
@@ -352,20 +359,22 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
         const pub2_x = new BigNumber(key2.getPublic().x.toString(16), 16);
         const pub2_y = new BigNumber(key2.getPublic().y.toString(16), 16);
 
-        const [k1_2x, k1_2y] = await ecCurve.deriveKey.call(d1, pub2_x, pub2_y);
+        let values = await ecCurve.deriveKey.call(d1, pub2_x, pub2_y);
+        const [k1_2x, k1_2y] = [values.qx, values.qy]
         log('k1_2x:' + k1_2x.toString(10));
         log('k1_2y:' + k1_2y.toString(10));
 
-        const [k2_1x, k2_1y] = await ecCurve.deriveKey.call(d2, pub1_x, pub1_y);
+        values = await ecCurve.deriveKey.call(d2, pub1_x, pub1_y);
+        const [k2_1x, k2_1y] = [values.qx, values.qy]
         log('k2_1x:' + k2_1x.toString(10));
         log('k2_1y:' + k2_1y.toString(10));
 
-        k2_1x.should.be.bignumber.equal(k1_2x);
-        k2_1y.should.be.bignumber.equal(k1_2y);
+        k2_1x.should.be.eq.BN(k1_2x);
+        k2_1y.should.be.eq.BN(k1_2y);
 
         const kd = key1.derive(key2.getPublic()).toString(10);
         log('keyDerived: ' + kd);
-        kd.should.be.bignumber.equal(k1_2x);
+        kd.should.be.eq.BN(k1_2x);
     });
 
     it('should follow associative property', async function () {
@@ -376,28 +385,32 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
         log('gx: ' + gx.toString(10));
         log('gy: ' + gy.toString(10));
 
-        var key1 = ec.genKeyPair();
-        var key2 = ec.genKeyPair();
-        var d1 = new BigNumber(key1.getPrivate().toString(16), 16);
-        var d2 = new BigNumber(key2.getPrivate().toString(16), 16);
+        let key1 = ec.genKeyPair();
+        let key2 = ec.genKeyPair();
+        let d1 = new BigNumber(key1.getPrivate().toString(16), 16);
+        let d2 = new BigNumber(key2.getPrivate().toString(16), 16);
         log('priv1:' + d1.toString(10));
         log('priv2:' + d2.toString(10));
 
-        const [pub1_x, pub1_y] = await ecCurve.publicKey.call(d1);
+        let values = await ecCurve.publicKey.call(d1);
+        const [pub1_x, pub1_y] = [values.qx, values.qy]
         log('pub1_x:' + pub1_x.toString(10));
         log('pub1_y:' + pub1_y.toString(10));
 
-        const [pub2_x, pub2_y] = await ecCurve.publicKey.call(d2);
+        values = await ecCurve.publicKey.call(d2);
+        const [pub2_x, pub2_y] = [values.qx, values.qy]
         log('pub2_x:' + pub2_x.toString(10));
         log('pub2_y:' + pub2_y.toString(10));
 
         var d12 = (d1.add(d2)).mod(n2);
         log('priv12:' + d12.toString(10));
-        const [pub12_x, pub12_y] = await ecCurve.publicKey.call(d12);
+        values = await ecCurve.publicKey.call(d12);
+        const [pub12_x, pub12_y] = [values.qx, values.qy]
         log('pub12_x:' + pub12_x.toString(10));
         log('pub12_y:' + pub12_y.toString(10));
 
-        let [add12_x, add12_y, add12_z] = await ecCurve._ecAdd.call(pub1_x, pub1_y, 1, pub2_x, pub2_y, 1);
+        values = await ecCurve._ecAdd.call(pub1_x, pub1_y, 1, pub2_x, pub2_y, 1);
+        let [add12_x, add12_y, add12_z] = [values.x3, values.y3, values.z3]
         const inv = await ecCurve._inverse.call(add12_z);
         log('Inv test2: ' + inv.mul(add12_z).mod(n).toString(10));
         add12_x = add12_x.mul(inv).mod(n);
@@ -405,18 +418,18 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
         log('add12_x:' + add12_x.toString(10));
         log('add12_y:' + add12_y.toString(10));
 
-        pub12_x.should.be.bignumber.equal(add12_x);
-        pub12_y.should.be.bignumber.equal(add12_y);
+        pub12_x.should.be.eq.BN(add12_x);
+        pub12_y.should.be.eq.BN(add12_y);
     });
 
     it('should verify for private key 1', async function () {
         const q = await ecCurve.ecmul.call(gx, gy, 1);
-        q[0].should.be.bignumber.equal(gx);
-        q[1].should.be.bignumber.equal(gy);
+        q[0].should.be.eq.BN(gx);
+        q[1].should.be.eq.BN(gy);
 
         const pk = await ecCurve.publicKey.call(1);
-        pk[0].should.be.bignumber.equal(gx);
-        pk[1].should.be.bignumber.equal(gy);
+        pk[0].should.be.eq.BN(gx);
+        pk[1].should.be.eq.BN(gy);
 
         (await ecCurve.ecmulVerify.call(gx, gy, 1, gx, gy)).should.be.true;
         (await ecCurve.publicKeyVerify.call(1, gx, gy)).should.be.true;
@@ -424,12 +437,12 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
 
     it('should verify for private key 2', async function () {
         const q = await ecCurve.ecmul.call(gx, gy, 2);
-        q[0].should.be.bignumber.equal(gx2);
-        q[1].should.be.bignumber.equal(gy2);
+        q[0].should.be.eq.BN(gx2);
+        q[1].should.be.eq.BN(gy2);
 
         const pk = await ecCurve.publicKey.call(2);
-        pk[0].should.be.bignumber.equal(gx2);
-        pk[1].should.be.bignumber.equal(gy2);
+        pk[0].should.be.eq.BN(gx2);
+        pk[1].should.be.eq.BN(gy2);
 
         (await ecCurve.ecmulVerify.call(gx, gy, 2, gx2, gy2)).should.be.true;
         (await ecCurve.publicKeyVerify.call(2, gx2, gy2)).should.be.true;
@@ -437,12 +450,12 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
 
     it('should verify for private key 3', async function () {
         const q = await ecCurve.ecmul.call(gx, gy, 3);
-        q[0].should.be.bignumber.equal(gx3);
-        q[1].should.be.bignumber.equal(gy3);
+        q[0].should.be.eq.BN(gx3);
+        q[1].should.be.eq.BN(gy3);
 
         const pk = await ecCurve.publicKey.call(3);
-        pk[0].should.be.bignumber.equal(gx3);
-        pk[1].should.be.bignumber.equal(gy3);
+        pk[0].should.be.eq.BN(gx3);
+        pk[1].should.be.eq.BN(gy3);
 
         (await ecCurve.ecmulVerify.call(gx, gy, 3, gx3, gy3)).should.be.true;
         (await ecCurve.publicKeyVerify.call(3, gx3, gy3)).should.be.true;
@@ -450,12 +463,12 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
 
     it('should verify for private key 4', async function () {
         const q = await ecCurve.ecmul.call(gx, gy, 4);
-        q[0].should.be.bignumber.equal(gx4);
-        q[1].should.be.bignumber.equal(gy4);
+        q[0].should.be.eq.BN(gx4);
+        q[1].should.be.eq.BN(gy4);
 
         const pk = await ecCurve.publicKey.call(4);
-        pk[0].should.be.bignumber.equal(gx4);
-        pk[1].should.be.bignumber.equal(gy4);
+        pk[0].should.be.eq.BN(gx4);
+        pk[1].should.be.eq.BN(gy4);
 
         (await ecCurve.ecmulVerify.call(gx, gy, 4, gx4, gy4)).should.be.true;
         (await ecCurve.publicKeyVerify.call(4, gx4, gy4)).should.be.true;
@@ -463,12 +476,12 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
 
     it('should verify for private key 0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', async function () {
         const q = await ecCurve.ecmul.call(gx, gy, '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-        q[0].should.be.bignumber.equal(gxA);
-        q[1].should.be.bignumber.equal(gyA);
+        q[0].should.be.eq.BN(gxA);
+        q[1].should.be.eq.BN(gyA);
 
         const pk = await ecCurve.publicKey.call('0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-        pk[0].should.be.bignumber.equal(gxA);
-        pk[1].should.be.bignumber.equal(gyA);
+        pk[0].should.be.eq.BN(gxA);
+        pk[1].should.be.eq.BN(gyA);
 
         (await ecCurve.ecmulVerify.call(gx, gy, '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', gxA, gyA)).should.be.true;
         (await ecCurve.publicKeyVerify.call('0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', gxA, gyA)).should.be.true;
@@ -476,12 +489,12 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
 
     it('should verify for private key 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF', async function () {
         const q = await ecCurve.ecmul.call(gx, gy, '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');
-        q[0].should.be.bignumber.equal(gxF);
-        q[1].should.be.bignumber.equal(gyF);
+        q[0].should.be.eq.BN(gxF);
+        q[1].should.be.eq.BN(gyF);
 
         const pk = await ecCurve.publicKey.call('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');
-        pk[0].should.be.bignumber.equal(gxF);
-        pk[1].should.be.bignumber.equal(gyF);
+        pk[0].should.be.eq.BN(gxF);
+        pk[1].should.be.eq.BN(gyF);
 
         (await ecCurve.ecmulVerify.call(gx, gy, '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF', gxF, gyF)).should.be.true;
         (await ecCurve.publicKeyVerify.call('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF', gxF, gyF)).should.be.true;
@@ -499,4 +512,5 @@ contract('EC', async function ([_, wallet1, wallet2, wallet3, wallet4, wallet5])
     //     log('Estimate gas: ' + gas);
     //     gas.should.be.lessThan(35000, 'Public key verification gas should be lower that 35K');
     // });
+    })
 });
